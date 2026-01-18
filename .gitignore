@@ -74,3 +74,8 @@ pnpm-debug.log*
 
 # TypeScript
 *.tsbuildinfo
+
+# Electron
+release/
+dist-electron/
+out/

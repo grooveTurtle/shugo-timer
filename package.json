@@ -1,12 +1,20 @@
 {
   "name": "shugo-timer",
   "private": true,
-  "version": "0.0.1",
-  "type": "module",
+  "version": "0.0.3",
+  "description": "슈고 페스타 웹 타이머 - 데스크톱 애플리케이션",
+  "author": "Your Name",
+  "main": "electron/main.cjs",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "electron:dev": "concurrently \"npm run dev\" \"wait-on http://localhost:5173 && electron .\"",
+    "electron:build": "npm run build && electron-builder",
+    "electron:build:win": "npm run build && electron-builder --win portable",
+    "electron:build:win:nsis": "npm run build && electron-builder --win nsis",
+    "electron:build:mac": "npm run build && electron-builder --mac",
+    "electron:build:linux": "npm run build && electron-builder --linux"
   },
   "dependencies": {
     "react": "^18.3.1",
@@ -16,7 +24,12 @@
     "@types/react": "^18.3.18",
     "@types/react-dom": "^18.3.5",
     "@vitejs/plugin-react": "^4.3.4",
+    "concurrently": "^9.2.1",
+    "cross-env": "^10.1.0",
+    "electron": "^40.0.0",
+    "electron-builder": "^26.4.0",
     "typescript": "^5.7.3",
-    "vite": "^6.0.11"
+    "vite": "^6.0.11",
+    "wait-on": "^9.0.3"
   }
 }
