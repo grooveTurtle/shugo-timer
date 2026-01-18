@@ -2,7 +2,7 @@
   "name": "shugo-timer",
   "private": true,
   "version": "0.0.3",
-  "description": "슈고 페스타 웹 타이머 - 데스크톱 애플리케이션",
+  "description": "슈고 페스타 타이머 - 데스크톱 애플리케이션",
   "author": "Your Name",
   "main": "electron/main.cjs",
   "scripts": {

@@ -148,7 +148,7 @@ function createTray() {
     }
   ]);
 
-  tray.setToolTip('슈고 페스타 웹 타이머');
+  tray.setToolTip('슈고 페스타 타이머');
   tray.setContextMenu(contextMenu);
 
   // 트레이 아이콘 클릭 시 창 표시
@@ -244,7 +244,7 @@ function updateTrayIcon() {
 
   if (!icon.isEmpty()) {
     tray.setImage(icon.resize({ width: 16, height: 16 }));
-    tray.setToolTip(timerEnabled ? '슈고 페스타 웹 타이머' : '슈고 페스타 웹 타이머 (비활성화)');
+    tray.setToolTip(timerEnabled ? '슈고 페스타 타이머' : '슈고 페스타 타이머 (비활성화)');
   }
 }
 
