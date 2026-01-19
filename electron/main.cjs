@@ -1,9 +1,89 @@
-const { app, BrowserWindow, Tray, Menu, nativeImage, ipcMain } = require('electron');
+const { app, BrowserWindow, Tray, Menu, nativeImage, ipcMain, globalShortcut } = require('electron');
 const path = require('path');
+const fs = require('fs');
 
 let mainWindow;
 let tray;
 let timerEnabled = true; // 타이머 활성화 상태
+let currentShortcuts = {
+  toggleTimer: 'CommandOrControl+Shift+W',
+  showWindow: 'CommandOrControl+Shift+Q',
+};
+
+// 설정 파일 경로
+const settingsPath = path.join(app.getPath('userData'), 'shortcuts.json');
+
+// 단축키 설정 로드
+function loadShortcuts() {
+  try {
+    if (fs.existsSync(settingsPath)) {
+      const data = fs.readFileSync(settingsPath, 'utf8');
+      currentShortcuts = { ...currentShortcuts, ...JSON.parse(data) };
+      console.log('단축키 설정 로드:', currentShortcuts);
+    }
+  } catch (error) {
+    console.error('단축키 설정 로드 실패:', error);
+  }
+}
+
+// 단축키 설정 저장
+function saveShortcuts(shortcuts) {
+  try {
+    fs.writeFileSync(settingsPath, JSON.stringify(shortcuts, null, 2));
+    console.log('단축키 설정 저장:', shortcuts);
+  } catch (error) {
+    console.error('단축키 설정 저장 실패:', error);
+  }
+}
+
+// 글로벌 단축키 등록
+function registerGlobalShortcuts() {
+  // 기존 단축키 해제
+  globalShortcut.unregisterAll();
+
+  // 타이머 토글 단축키
+  if (currentShortcuts.toggleTimer) {
+    try {
+      const registered = globalShortcut.register(currentShortcuts.toggleTimer, () => {
+        console.log('글로벌 단축키로 타이머 토글:', currentShortcuts.toggleTimer);
+        toggleTimer();
+      });
+
+      if (registered) {
+        console.log('타이머 토글 단축키 등록 성공:', currentShortcuts.toggleTimer);
+      } else {
+        console.error('타이머 토글 단축키 등록 실패:', currentShortcuts.toggleTimer);
+      }
+    } catch (error) {
+      console.error('타이머 토글 단축키 등록 오류:', error);
+    }
+  }
+
+  // 창 표시 단축키
+  if (currentShortcuts.showWindow) {
+    try {
+      const registered = globalShortcut.register(currentShortcuts.showWindow, () => {
+        console.log('글로벌 단축키로 창 표시:', currentShortcuts.showWindow);
+        if (mainWindow) {
+          if (mainWindow.isVisible()) {
+            mainWindow.hide();
+          } else {
+            mainWindow.show();
+            mainWindow.focus();
+          }
+        }
+      });
+
+      if (registered) {
+        console.log('창 표시 단축키 등록 성공:', currentShortcuts.showWindow);
+      } else {
+        console.error('창 표시 단축키 등록 실패:', currentShortcuts.showWindow);
+      }
+    } catch (error) {
+      console.error('창 표시 단축키 등록 오류:', error);
+    }
+  }
+}
 
 function createWindow() {
   mainWindow = new BrowserWindow({
@@ -271,9 +351,40 @@ ipcMain.on('set-timer-enabled', (_event, enabled) => {
   updateTrayIcon();
 });
 
+// 단축키 설정 가져오기
+ipcMain.handle('get-shortcuts', () => {
+  return currentShortcuts;
+});
+
+// 단축키 설정 업데이트
+ipcMain.handle('set-shortcuts', (_event, shortcuts) => {
+  console.log('단축키 설정 업데이트:', shortcuts);
+  currentShortcuts = shortcuts;
+  saveShortcuts(shortcuts);
+  registerGlobalShortcuts();
+  return { success: true };
+});
+
+// 단축키 유효성 검사
+ipcMain.handle('validate-shortcut', (_event, shortcut) => {
+  try {
+    // 임시로 등록해보고 해제
+    const isValid = globalShortcut.register(shortcut, () => {});
+    if (isValid) {
+      globalShortcut.unregister(shortcut);
+      return { valid: true };
+    }
+    return { valid: false, error: '이미 사용 중인 단축키입니다.' };
+  } catch (error) {
+    return { valid: false, error: '유효하지 않은 단축키 형식입니다.' };
+  }
+});
+
 app.whenReady().then(() => {
+  loadShortcuts();
   createWindow();
   createTray();
+  registerGlobalShortcuts();
 
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) {
@@ -292,4 +403,9 @@ app.on('window-all-closed', () => {
 // 앱이 종료되기 전
 app.on('before-quit', () => {
   app.isQuitting = true;
+});
+
+// 앱이 종료될 때 글로벌 단축키 해제
+app.on('will-quit', () => {
+  globalShortcut.unregisterAll();
 });

@@ -9,4 +9,13 @@ contextBridge.exposeInMainWorld('electronAPI', {
   onToggleTimer: (callback) => {
     ipcRenderer.on('toggle-timer', () => callback());
   },
+
+  // 단축키 설정 가져오기
+  getShortcuts: () => ipcRenderer.invoke('get-shortcuts'),
+
+  // 단축키 설정 저장
+  setShortcuts: (shortcuts) => ipcRenderer.invoke('set-shortcuts', shortcuts),
+
+  // 단축키 유효성 검사
+  validateShortcut: (shortcut) => ipcRenderer.invoke('validate-shortcut', shortcut),
 });

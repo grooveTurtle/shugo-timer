@@ -1,0 +1,285 @@
+.shortcut-settings {
+  background-color: rgba(255, 255, 255, 0.03);
+  border-radius: 16px;
+  padding: 2rem;
+  margin-top: 2rem;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  transition: all 0.3s ease;
+}
+
+.shortcut-settings .settings-header {
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 2px solid rgba(100, 108, 255, 0.2);
+}
+
+.shortcut-settings .settings-header h2 {
+  margin: 0 0 0.5rem 0;
+  color: #646cff;
+  font-size: 1.8rem;
+}
+
+.shortcut-settings .settings-description {
+  margin: 0;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.shortcut-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 2.5rem;
+}
+
+.shortcut-item {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  transition: all 0.2s ease;
+}
+
+.shortcut-item:hover {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(100, 108, 255, 0.2);
+}
+
+.shortcut-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.shortcut-label {
+  font-size: 1.2rem;
+  font-weight: 500;
+  margin-bottom: 0.25rem;
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.shortcut-description {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.shortcut-input-container {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.shortcut-display {
+  background: rgba(100, 108, 255, 0.15);
+  border: 1px solid rgba(100, 108, 255, 0.3);
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-family: 'Courier New', Consolas, monospace;
+  font-size: 0.9rem;
+  font-weight: 600;
+  min-width: 180px;
+  max-width: 280px;
+  text-align: center;
+  color: #646cff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.shortcut-input {
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.9);
+  border: 2px solid rgba(100, 108, 255, 0.3);
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-family: 'Courier New', Consolas, monospace;
+  font-size: 0.9rem;
+  font-weight: 600;
+  min-width: 180px;
+  max-width: 280px;
+  text-align: center;
+  outline: none;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.shortcut-input:focus {
+  border-color: #646cff;
+  background: rgba(100, 108, 255, 0.15);
+  box-shadow: 0 0 0 2px rgba(100, 108, 255, 0.2);
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.shortcut-btn {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.edit-btn {
+  background: rgba(100, 108, 255, 0.15);
+  color: #646cff;
+  border: 1px solid rgba(100, 108, 255, 0.2);
+}
+
+.edit-btn:hover {
+  background: rgba(100, 108, 255, 0.25);
+  border-color: rgba(100, 108, 255, 0.3);
+}
+
+.save-btn {
+  background: rgba(16, 185, 129, 0.2);
+  color: #10b981;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.save-btn:hover {
+  background: rgba(16, 185, 129, 0.3);
+  border-color: rgba(16, 185, 129, 0.4);
+}
+
+.cancel-btn {
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.cancel-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.shortcut-error {
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.error-icon {
+  font-size: 1.1rem;
+}
+
+.error-text {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #ff6666;
+}
+
+.shortcut-help {
+  background: rgba(100, 108, 255, 0.05);
+  border: 1px solid rgba(100, 108, 255, 0.1);
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+}
+
+.shortcut-help h4 {
+  margin: 0 0 0.75rem 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #646cff;
+}
+
+.shortcut-help ul {
+  margin: 0;
+  padding-left: 1.25rem;
+  font-size: 0.85rem;
+  line-height: 1.6;
+  opacity: 0.7;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.shortcut-help li {
+  margin-bottom: 0.25rem;
+}
+
+.shortcut-help li:last-child {
+  margin-bottom: 0;
+}
+
+/* Light Mode */
+@media (prefers-color-scheme: light) {
+  .shortcut-settings {
+    background-color: rgba(0, 0, 0, 0.02);
+    border-color: rgba(0, 0, 0, 0.08);
+  }
+
+  .shortcut-settings .settings-header {
+    border-bottom-color: rgba(100, 108, 255, 0.15);
+  }
+
+  .shortcut-settings .settings-description {
+    color: rgba(0, 0, 0, 0.5);
+  }
+
+  .shortcut-label {
+    color: rgba(0, 0, 0, 0.85);
+  }
+
+  .shortcut-description {
+    color: rgba(0, 0, 0, 0.5);
+  }
+
+  .shortcut-item {
+    border-color: rgba(0, 0, 0, 0.1);
+    background-color: rgba(0, 0, 0, 0.02);
+  }
+
+  .shortcut-item:hover {
+    background-color: rgba(100, 108, 255, 0.08);
+  }
+
+  .shortcut-input {
+    background-color: white;
+    color: rgba(0, 0, 0, 0.9);
+  }
+
+  .cancel-btn {
+    border-color: rgba(0, 0, 0, 0.2);
+    color: rgba(0, 0, 0, 0.6);
+  }
+
+  .cancel-btn:hover {
+    border-color: rgba(0, 0, 0, 0.4);
+    color: rgba(0, 0, 0, 0.8);
+  }
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+  .shortcut-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .shortcut-input-container {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+
+  .shortcut-display,
+  .shortcut-input {
+    min-width: 0;
+    width: 100%;
+    max-width: none;
+  }
+
+  .shortcut-btn {
+    flex: 1;
+  }
+}

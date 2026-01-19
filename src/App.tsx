@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import Clock from './components/Clock';
 import TimerSettings from './components/TimerSettings';
+import ShortcutSettings from './components/ShortcutSettings';
 import AlarmModal from './components/AlarmModal';
 import { useTimerSettings } from './hooks/useTimerSettings';
 import { useNotification } from './hooks/useNotification';
@@ -95,11 +96,8 @@ function App() {
       <main>
         <Clock nextAlarms={nextAlarms} />
         <TimerSettings settings={settings} onUpdate={updateSettings} />
+        <ShortcutSettings />
       </main>
-
-      <footer>
-        <p>타이머는 백그라운드에서 계속 실행됩니다.</p>
-      </footer>
 
       <AlarmModal
         isOpen={alarmState.isOpen}
