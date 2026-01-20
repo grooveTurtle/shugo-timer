@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import Clock from './components/Clock';
 import TimerSettings from './components/TimerSettings';
 import ShortcutSettings from './components/ShortcutSettings';
@@ -58,24 +58,6 @@ function App() {
     }
   }, [settings.enabled, updateSettings]);
 
-  const nextAlarms = useMemo(() => {
-    const now = new Date();
-    const currentMinute = now.getMinutes();
-    const currentHour = now.getHours();
-
-    const upcoming = settings.alarmMinutes
-      .map(minute => {
-        let hour = currentHour;
-        if (minute <= currentMinute) {
-          hour = (currentHour + 1) % 24;
-        }
-        return `${hour}시 ${minute}분`;
-      })
-      .slice(0, 3);
-
-    return upcoming;
-  }, [settings.alarmMinutes]);
-
   return (
     <div className="app">
       <header>
@@ -94,7 +76,7 @@ function App() {
       </header>
 
       <main>
-        <Clock nextAlarms={nextAlarms} />
+        <Clock alarmMinutes={settings.alarmMinutes} />
         <TimerSettings settings={settings} onUpdate={updateSettings} />
         <ShortcutSettings />
       </main>

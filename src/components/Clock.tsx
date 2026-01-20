@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import './Clock.css';
 
 interface ClockProps {
-  nextAlarms: string[];
+  alarmMinutes: number[];
 }
 
-const Clock: React.FC<ClockProps> = ({ nextAlarms }) => {
+const Clock: React.FC<ClockProps> = ({ alarmMinutes }) => {
   const [time, setTime] = useState(new Date());
 
   useEffect(() => {
@@ -15,6 +15,21 @@ const Clock: React.FC<ClockProps> = ({ nextAlarms }) => {
 
     return () => clearInterval(timer);
   }, []);
+
+  const nextAlarms = useMemo(() => {
+    const currentMinute = time.getMinutes();
+    const currentHour = time.getHours();
+
+    return alarmMinutes
+      .map(minute => {
+        let hour = currentHour;
+        if (minute <= currentMinute) {
+          hour = (currentHour + 1) % 24;
+        }
+        return `${hour}시 ${minute}분`;
+      })
+      .slice(0, 3);
+  }, [time, alarmMinutes]);
 
   const formatTime = (date: Date) => {
     const hours = String(date.getHours()).padStart(2, '0');
