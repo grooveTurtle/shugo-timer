@@ -38,8 +38,46 @@
 }
 
 .next-alarms li {
-  padding: 0.3rem 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.5rem;
   color: rgba(255, 255, 255, 0.7);
+  border-radius: 4px;
+}
+
+.next-alarms li:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.alarm-time {
+  font-weight: 500;
+}
+
+.alarm-content {
+  font-size: 0.75rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 10px;
+}
+
+.alarm-content.shugo {
+  color: #ff9800;
+  background-color: rgba(255, 152, 0, 0.15);
+}
+
+.alarm-content.sigong {
+  color: #4caf50;
+  background-color: rgba(76, 175, 80, 0.15);
+}
+
+.next-alarms.empty {
+  opacity: 0.6;
+}
+
+.next-alarms.empty p {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.5);
+  margin: 0;
 }
 
 @media (prefers-color-scheme: light) {
@@ -53,5 +91,19 @@
 
   .next-alarms li {
     color: rgba(0, 0, 0, 0.7);
+  }
+
+  .next-alarms li:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+  }
+
+  .alarm-content.shugo {
+    color: #e65100;
+    background-color: rgba(255, 152, 0, 0.15);
+  }
+
+  .alarm-content.sigong {
+    color: #2e7d32;
+    background-color: rgba(76, 175, 80, 0.15);
   }
 }

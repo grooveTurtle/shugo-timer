@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
-import { AlarmSchedulerProps } from '@/types';
-import { GAME_START_NOTICE_SECONDS } from '@/constants';
+import { AlarmSchedulerProps, ContentType } from '@/types';
+import { GAME_START_NOTICE_SECONDS, CONTENT_LIST } from '@/constants';
 
 export const useAlarmScheduler = ({ settings, onAlarm, onGameStartNotice }: AlarmSchedulerProps) => {
   const intervalRef = useRef<number | null>(null);
@@ -20,63 +20,101 @@ export const useAlarmScheduler = ({ settings, onAlarm, onGameStartNotice }: Alar
       const currentMinute = now.getMinutes();
       const currentSecond = now.getSeconds();
 
-      settings.alarmMinutes.forEach((alarmMinute) => {
-        // 메인 알람 체크
-        if (currentMinute === alarmMinute && currentSecond === 0) {
-          const alarmKey = `${currentHour}:${currentMinute}:main`;
-          if (!notifiedAlarmsRef.current.has(alarmKey)) {
-            notifiedAlarmsRef.current.add(alarmKey);
-            onAlarm(`${currentHour}시 ${alarmMinute}분 슈고 페스타가 열렸습니다!`, false);
+      // 모든 활성화된 컨텐츠를 순회
+      (Object.keys(settings.contentSettings) as ContentType[]).forEach(contentId => {
+        const contentConfig = settings.contentSettings[contentId];
+        const contentInfo = CONTENT_LIST.find(c => c.id === contentId);
 
-            setTimeout(() => {
-              notifiedAlarmsRef.current.delete(alarmKey);
-            }, 60000);
-          }
+        // 비활성화되었거나 옵션이 선택되지 않은 컨텐츠는 스킵
+        if (!contentConfig.enabled || contentConfig.options.length === 0 || !contentInfo) {
+          return;
         }
 
-        // 사전 알림 체크
-        settings.advanceNotices.forEach((advance) => {
-          const advanceMinute = (alarmMinute - advance + 60) % 60;
+        // 컨텐츠별 알람 시간 계산
+        const alarmTimes = contentInfo.getAlarmTimes(contentConfig.options);
 
-          if (currentMinute === advanceMinute && currentSecond === 0) {
-            const advanceKey = `${currentHour}:${currentMinute}:advance${advance}`;
-            if (!notifiedAlarmsRef.current.has(advanceKey)) {
-              notifiedAlarmsRef.current.add(advanceKey);
-              onAlarm(`${advance}분 후 슈고 페스타 예정`, true);
+        alarmTimes.forEach(({ hour: alarmHour, minute: alarmMinute }) => {
+          // 슈고 페스타: 매 시간 해당 분에 알람 (hour는 무시)
+          // 시공의 균열: 특정 시간에만 알람 (hour 체크)
+          const isTimeMatch = contentId === 'shugo'
+            ? currentMinute === alarmMinute
+            : currentHour === alarmHour && currentMinute === alarmMinute;
+
+          // 메인 알람 체크
+          if (isTimeMatch && currentSecond === 0) {
+            const alarmKey = `${currentHour}:${currentMinute}:${contentId}:main`;
+            if (!notifiedAlarmsRef.current.has(alarmKey)) {
+              notifiedAlarmsRef.current.add(alarmKey);
+
+              const message = contentId === 'shugo'
+                ? `${currentHour}시 ${alarmMinute}분 슈고 페스타가 열렸습니다!`
+                : `${currentHour}시 시공의 균열이 열렸습니다!`;
+
+              onAlarm(message, false);
 
               setTimeout(() => {
-                notifiedAlarmsRef.current.delete(advanceKey);
+                notifiedAlarmsRef.current.delete(alarmKey);
               }, 60000);
+            }
+          }
+
+          // 사전 알림 체크
+          settings.advanceNotices.forEach((advance) => {
+            let advanceHour = alarmHour;
+            let advanceMinute = alarmMinute - advance;
+
+            // 분이 음수인 경우 시간 조정
+            if (advanceMinute < 0) {
+              advanceMinute += 60;
+              advanceHour = (advanceHour - 1 + 24) % 24;
+            }
+
+            const isAdvanceTimeMatch = contentId === 'shugo'
+              ? currentMinute === advanceMinute
+              : currentHour === advanceHour && currentMinute === advanceMinute;
+
+            if (isAdvanceTimeMatch && currentSecond === 0) {
+              const advanceKey = `${currentHour}:${currentMinute}:${contentId}:advance${advance}`;
+              if (!notifiedAlarmsRef.current.has(advanceKey)) {
+                notifiedAlarmsRef.current.add(advanceKey);
+
+                const contentName = contentInfo.name;
+                onAlarm(`${advance}분 후 ${contentName} 예정`, true);
+
+                setTimeout(() => {
+                  notifiedAlarmsRef.current.delete(advanceKey);
+                }, 60000);
+              }
+            }
+          });
+
+          // 경기 시작 알림 체크 (슈고 페스타 전용)
+          if (contentId === 'shugo' && settings.gameStartNotice && onGameStartNotice) {
+            // 알람 시간으로부터 170초 후 시간 계산
+            const alarmTimeInSeconds = alarmMinute * 60;
+            const gameStartNoticeTime = alarmTimeInSeconds + GAME_START_NOTICE_SECONDS;
+
+            // 60분을 넘어갈 경우 다음 시간대로 조정
+            const adjustedNoticeTime = gameStartNoticeTime >= 3600
+              ? gameStartNoticeTime - 3600
+              : gameStartNoticeTime;
+
+            const noticeMinute = Math.floor(adjustedNoticeTime / 60);
+            const noticeSecond = adjustedNoticeTime % 60;
+
+            if (currentMinute === noticeMinute && currentSecond === noticeSecond) {
+              const gameStartKey = `${currentHour}:${currentMinute}:${currentSecond}:gamestart`;
+              if (!notifiedAlarmsRef.current.has(gameStartKey)) {
+                notifiedAlarmsRef.current.add(gameStartKey);
+                onGameStartNotice('10초 후 경기 시작! 준비하세요!');
+
+                setTimeout(() => {
+                  notifiedAlarmsRef.current.delete(gameStartKey);
+                }, 60000);
+              }
             }
           }
         });
-
-        // 경기 시작 알림 체크
-        if (settings.gameStartNotice && onGameStartNotice) {
-          // 알람 시간으로부터 170초 후 시간 계산
-          const alarmTimeInSeconds = alarmMinute * 60;
-          const gameStartNoticeTime = alarmTimeInSeconds + GAME_START_NOTICE_SECONDS;
-
-          // 60분을 넘어갈 경우 다음 시간대로 조정
-          const adjustedNoticeTime = gameStartNoticeTime >= 3600
-            ? gameStartNoticeTime - 3600
-            : gameStartNoticeTime;
-
-          const noticeMinute = Math.floor(adjustedNoticeTime / 60);
-          const noticeSecond = adjustedNoticeTime % 60;
-
-          if (currentMinute === noticeMinute && currentSecond === noticeSecond) {
-            const gameStartKey = `${currentHour}:${currentMinute}:${currentSecond}:gamestart`;
-            if (!notifiedAlarmsRef.current.has(gameStartKey)) {
-              notifiedAlarmsRef.current.add(gameStartKey);
-              onGameStartNotice('10초 후 경기 시작! 준비하세요!');
-
-              setTimeout(() => {
-                notifiedAlarmsRef.current.delete(gameStartKey);
-              }, 60000);
-            }
-          }
-        }
       });
     };
 

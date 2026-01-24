@@ -1,29 +1,53 @@
 import React, { useState } from 'react';
-import { TimerSettingsProps } from '@/types';
+import { TimerSettingsProps, ContentType } from '@/types';
 import {
   ALARM_SOUNDS,
-  QUICK_ALARM_MINUTES,
   QUICK_ADVANCE_NOTICES,
+  CONTENT_LIST,
+  CONTENT_OPTIONS,
 } from '@/constants';
 import { soundGenerator } from '@/utils/soundGenerator';
 import './TimerSettings.css';
 
 const TimerSettings: React.FC<TimerSettingsProps> = ({ settings, onUpdate }) => {
-  const [showCustomAlarm, setShowCustomAlarm] = useState(false);
   const [showCustomAdvance, setShowCustomAdvance] = useState(false);
-  const [customAlarmMinute, setCustomAlarmMinute] = useState('');
   const [customAdvanceNotice, setCustomAdvanceNotice] = useState('');
 
   const playTestSound = (soundValue: string) => {
     soundGenerator.play(soundValue, 0.5);
   };
 
-  const toggleAlarmMinute = (minute: number) => {
-    if (settings.alarmMinutes.includes(minute)) {
-      onUpdate({ alarmMinutes: settings.alarmMinutes.filter((m) => m !== minute) });
-    } else {
-      onUpdate({ alarmMinutes: [...settings.alarmMinutes, minute].sort((a, b) => a - b) });
-    }
+  const toggleContentEnabled = (contentId: ContentType) => {
+    const isCurrentlyEnabled = settings.contentSettings[contentId].enabled;
+    const allOptions = CONTENT_OPTIONS[contentId].map(opt => opt.value);
+
+    onUpdate({
+      contentSettings: {
+        ...settings.contentSettings,
+        [contentId]: {
+          enabled: !isCurrentlyEnabled,
+          // 활성화 시 모든 옵션 선택, 비활성화 시 옵션 유지
+          options: !isCurrentlyEnabled ? allOptions : settings.contentSettings[contentId].options,
+        },
+      },
+    });
+  };
+
+  const toggleContentOption = (contentId: ContentType, optionValue: number) => {
+    const currentOptions = settings.contentSettings[contentId].options;
+    const newOptions = currentOptions.includes(optionValue)
+      ? currentOptions.filter(v => v !== optionValue)
+      : [...currentOptions, optionValue].sort((a, b) => a - b);
+
+    onUpdate({
+      contentSettings: {
+        ...settings.contentSettings,
+        [contentId]: {
+          ...settings.contentSettings[contentId],
+          options: newOptions,
+        },
+      },
+    });
   };
 
   const toggleAdvanceNotice = (advance: number) => {
@@ -31,15 +55,6 @@ const TimerSettings: React.FC<TimerSettingsProps> = ({ settings, onUpdate }) => 
       onUpdate({ advanceNotices: settings.advanceNotices.filter((a) => a !== advance) });
     } else {
       onUpdate({ advanceNotices: [...settings.advanceNotices, advance].sort((a, b) => a - b) });
-    }
-  };
-
-  const addCustomAlarmMinute = () => {
-    const minute = Number(customAlarmMinute);
-    if (!isNaN(minute) && minute >= 0 && minute < 60 && !settings.alarmMinutes.includes(minute)) {
-      onUpdate({ alarmMinutes: [...settings.alarmMinutes, minute].sort((a, b) => a - b) });
-      setCustomAlarmMinute('');
-      setShowCustomAlarm(false);
     }
   };
 
@@ -52,17 +67,14 @@ const TimerSettings: React.FC<TimerSettingsProps> = ({ settings, onUpdate }) => 
     }
   };
 
-  const removeCustomAlarmMinute = (minute: number) => {
-    if (!QUICK_ALARM_MINUTES.includes(minute)) {
-      onUpdate({ alarmMinutes: settings.alarmMinutes.filter((m) => m !== minute) });
-    }
-  };
-
   const removeCustomAdvanceNotice = (advance: number) => {
     if (!QUICK_ADVANCE_NOTICES.includes(advance)) {
       onUpdate({ advanceNotices: settings.advanceNotices.filter((a) => a !== advance) });
     }
   };
+
+  // 활성화된 컨텐츠가 하나도 없는지 확인
+  const noContentEnabled = !Object.values(settings.contentSettings).some(c => c.enabled);
 
   return (
     <div className={`timer-settings ${!settings.enabled ? 'disabled' : ''}`}>
@@ -90,59 +102,64 @@ const TimerSettings: React.FC<TimerSettingsProps> = ({ settings, onUpdate }) => 
 
       <div className="setting-section">
         <div className="section-header">
-          <h3>알람 시간</h3>
-          <p className="section-description">매 시간마다 울릴 분을 선택하세요</p>
+          <h3>컨텐츠 선택</h3>
+          <p className="section-description">알림을 받을 게임 컨텐츠를 선택하세요 (복수 선택 가능)</p>
         </div>
 
-        <div className="quick-select-grid">
-          {QUICK_ALARM_MINUTES.map((minute) => (
-            <button
-              key={minute}
-              className={`quick-select-btn ${settings.alarmMinutes.includes(minute) ? 'active' : ''}`}
-              onClick={() => toggleAlarmMinute(minute)}
-            >
-              {minute}분
-            </button>
-          ))}
-        </div>
+        {noContentEnabled && (
+          <div className="warning-banner small">
+            <span className="warning-icon">⚠️</span>
+            <span className="warning-text">컨텐츠를 선택해주세요.</span>
+          </div>
+        )}
 
-        {settings.alarmMinutes.filter(m => !QUICK_ALARM_MINUTES.includes(m)).length > 0 && (
-          <div className="custom-items">
-            <span className="custom-label">커스텀:</span>
-            {settings.alarmMinutes
-              .filter(m => !QUICK_ALARM_MINUTES.includes(m))
-              .map((minute) => (
-                <div key={minute} className="custom-chip">
-                  <span>{minute}분</span>
-                  <button onClick={() => removeCustomAlarmMinute(minute)}>×</button>
+        <div className="content-list">
+          {CONTENT_LIST.map((content) => {
+            const contentConfig = settings.contentSettings[content.id];
+            const options = CONTENT_OPTIONS[content.id];
+
+            return (
+              <div key={content.id} className={`content-card ${contentConfig.enabled ? 'active' : ''}`}>
+                <div className="content-header">
+                  <label className={`toggle-switch ${!contentConfig.enabled ? 'inactive' : ''}`}>
+                    <input
+                      type="checkbox"
+                      checked={contentConfig.enabled}
+                      onChange={() => toggleContentEnabled(content.id)}
+                    />
+                    <span className="toggle-slider"></span>
+                  </label>
+                  <div className="content-info">
+                    <span className="content-name">{content.name}</span>
+                    <span className="content-description">{content.description}</span>
+                  </div>
                 </div>
-              ))}
-          </div>
-        )}
 
-        {!showCustomAlarm ? (
-          <button className="add-custom-btn" onClick={() => setShowCustomAlarm(true)}>
-            + 다른 시간 추가
-          </button>
-        ) : (
-          <div className="custom-input-row">
-            <input
-              type="number"
-              min="0"
-              max="59"
-              value={customAlarmMinute}
-              onChange={(e) => setCustomAlarmMinute(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter') addCustomAlarmMinute();
-                if (e.key === 'Escape') setShowCustomAlarm(false);
-              }}
-              placeholder="분 (0-59)"
-              autoFocus
-            />
-            <button onClick={addCustomAlarmMinute} className="confirm-btn">추가</button>
-            <button onClick={() => setShowCustomAlarm(false)} className="cancel-btn">취소</button>
-          </div>
-        )}
+                {contentConfig.enabled && (
+                  <div className="content-options">
+                    <div className="options-grid">
+                      {options.map((option) => (
+                        <button
+                          key={option.value}
+                          className={`option-btn ${contentConfig.options.includes(option.value) ? 'active' : ''}`}
+                          onClick={() => toggleContentOption(content.id, option.value)}
+                        >
+                          {option.label}
+                        </button>
+                      ))}
+                    </div>
+                    {contentConfig.options.length === 0 && (
+                      <div className="warning-banner small">
+                        <span className="warning-icon">⚠️</span>
+                        <span className="warning-text">시간을 선택해주세요.</span>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
       </div>
 
       <div className="setting-section">
@@ -205,7 +222,7 @@ const TimerSettings: React.FC<TimerSettingsProps> = ({ settings, onUpdate }) => 
       <div className="setting-section">
         <div className="section-header">
           <h3>경기 시작 알림</h3>
-          <p className="section-description">경기 시작 10초 전 알림 기능</p>
+          <p className="section-description">경기 시작 10초 전 알림 기능 (슈고 페스타 전용)</p>
         </div>
 
         <label className={`toggle-switch ${!settings.gameStartNotice ? 'inactive' : ''}`}>

@@ -80,7 +80,7 @@ function App() {
   return (
     <div className="app">
       <header>
-        <h1>슈고 페스타 타이머</h1>
+        <h1>아이온2 컨텐츠 타이머</h1>
         {permission !== 'granted' && (
           <div className="notification-banner">
             <p>브라우저 알림을 허용하면 백그라운드에서도 알람을 받을 수 있습니다.</p>
@@ -95,7 +95,7 @@ function App() {
       </header>
 
       <main>
-        <Clock alarmMinutes={settings.alarmMinutes} />
+        <Clock settings={settings} />
         <TimerSettings settings={settings} onUpdate={updateSettings} />
         <ShortcutSettings />
       </main>
