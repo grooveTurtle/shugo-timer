@@ -1,6 +1,6 @@
 {
-  "appId": "com.shugo.timer",
-  "productName": "ShugoTimer",
+  "appId": "com.aion2.content-timer",
+  "productName": "Aion2ContentTimer",
   "directories": {
     "output": "release",
     "buildResources": "build"

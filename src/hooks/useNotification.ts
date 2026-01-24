@@ -30,7 +30,7 @@ export const useNotification = () => {
         body,
         icon: '/vite.svg',
         badge: '/vite.svg',
-        tag: customTag || `shugo-timer-${Date.now()}`,
+        tag: customTag || `aion2-timer-${Date.now()}`,
         requireInteraction: false,
       });
 

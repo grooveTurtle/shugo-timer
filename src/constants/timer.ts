@@ -69,7 +69,7 @@ export const DEFAULT_TIMER_SETTINGS: TimerSettings = {
 export const GAME_START_NOTICE_SECONDS = 170; // 2분 50초 = 170초
 
 // 로컬 스토리지 키
-export const STORAGE_KEY = 'shugo-timer-settings';
+export const STORAGE_KEY = 'aion2-content-timer-settings';
 
 // 빠른 선택 옵션
 export const QUICK_ADVANCE_NOTICES = [1, 3, 5, 10];
