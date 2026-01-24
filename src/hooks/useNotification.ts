@@ -1,8 +1,8 @@
-import { useEffect, useState, useCallback } from 'react';
-import { soundGenerator } from '../utils/soundGenerator';
+import { useEffect, useState, useCallback, useRef } from 'react';
 
 export const useNotification = () => {
   const [permission, setPermission] = useState<NotificationPermission>('default');
+  const onDismissRef = useRef<(() => void) | null>(null);
 
   useEffect(() => {
     if ('Notification' in window) {
@@ -19,7 +19,12 @@ export const useNotification = () => {
     return 'denied';
   }, []);
 
-  const showNotification = useCallback((title: string, body: string, soundType?: string, volume?: number) => {
+  // onDismiss 콜백 등록
+  const setOnDismiss = useCallback((callback: () => void) => {
+    onDismissRef.current = callback;
+  }, []);
+
+  const showNotification = useCallback((title: string, body: string) => {
     if (permission === 'granted') {
       const notification = new Notification(title, {
         body,
@@ -29,18 +34,18 @@ export const useNotification = () => {
         requireInteraction: false,
       });
 
-      if (soundType) {
-        soundGenerator.play(soundType, volume ?? 0.5);
-      }
-
       notification.onclick = () => {
         window.focus();
         notification.close();
+        // 알림 클릭 시 모달도 닫기
+        if (onDismissRef.current) {
+          onDismissRef.current();
+        }
       };
 
       setTimeout(() => notification.close(), 10000);
     }
   }, [permission]);
 
-  return { permission, requestPermission, showNotification };
+  return { permission, requestPermission, showNotification, setOnDismiss };
 };

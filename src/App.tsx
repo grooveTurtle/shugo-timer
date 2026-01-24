@@ -12,27 +12,12 @@ import './App.css';
 
 function App() {
   const { settings, updateSettings } = useTimerSettings();
-  const { permission, requestPermission, showNotification } = useNotification();
+  const { permission, requestPermission, showNotification, setOnDismiss } = useNotification();
   const [alarmState, setAlarmState] = useState<AlarmState>({
     isOpen: false,
     title: '',
     message: '',
   });
-
-  const handleAlarm = useCallback((message: string, isAdvance: boolean) => {
-    console.log('Alarm triggered:', message);
-    const title = isAdvance ? '사전 알림' : '알람';
-
-    // 브라우저 알림 표시
-    showNotification(title, message, settings.alarmSound, 0.5);
-
-    // 모달 표시
-    setAlarmState({
-      isOpen: true,
-      title,
-      message,
-    });
-  }, [showNotification, settings.alarmSound]);
 
   const handleDismissAlarm = useCallback(() => {
     setAlarmState({
@@ -41,6 +26,26 @@ function App() {
       message: '',
     });
   }, []);
+
+  // 알림 클릭 시 모달도 닫히도록 콜백 등록
+  useEffect(() => {
+    setOnDismiss(handleDismissAlarm);
+  }, [setOnDismiss, handleDismissAlarm]);
+
+  const handleAlarm = useCallback((message: string, isAdvance: boolean) => {
+    console.log('Alarm triggered:', message);
+    const title = isAdvance ? '사전 알림' : '알람';
+
+    // 브라우저 알림 표시
+    showNotification(title, message);
+
+    // 모달 표시
+    setAlarmState({
+      isOpen: true,
+      title,
+      message,
+    });
+  }, [showNotification]);
 
   useAlarmScheduler({ settings, onAlarm: handleAlarm });
 
