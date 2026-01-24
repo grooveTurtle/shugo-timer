@@ -89,29 +89,65 @@ export class SoundGenerator {
     }
   }
 
-  // 경기 시작 알림 (짧고 주목을 끄는 더블 비프)
+  // 경기 시작 알림 (긴박한 트리플 팡파레)
   playGameStart(volume: number = 0.5): void {
     const ctx = this.getAudioContext();
 
-    // 두 번의 짧은 고음 비프
-    for (let i = 0; i < 2; i++) {
+    // 상승하는 3연속 팡파레 (긴박감 표현)
+    const notes = [523.25, 659.25, 783.99]; // C5, E5, G5 (메이저 코드)
+
+    notes.forEach((freq, index) => {
+      // 메인 톤
       const oscillator = ctx.createOscillator();
       const gainNode = ctx.createGain();
 
       oscillator.connect(gainNode);
       gainNode.connect(ctx.destination);
 
-      const startTime = ctx.currentTime + i * 0.15;
+      const startTime = ctx.currentTime + index * 0.12;
 
-      oscillator.frequency.value = 1200; // 높은 음으로 주목 유도
-      oscillator.type = 'sine';
+      oscillator.frequency.value = freq;
+      oscillator.type = 'square'; // 더 날카로운 소리
 
-      gainNode.gain.setValueAtTime(volume * 0.5, startTime);
-      gainNode.gain.exponentialRampToValueAtTime(0.01, startTime + 0.1);
+      gainNode.gain.setValueAtTime(volume * 0.6, startTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.01, startTime + 0.15);
 
       oscillator.start(startTime);
-      oscillator.stop(startTime + 0.12);
-    }
+      oscillator.stop(startTime + 0.15);
+
+      // 배음 추가 (풍성한 소리)
+      const harmonic = ctx.createOscillator();
+      const harmonicGain = ctx.createGain();
+
+      harmonic.connect(harmonicGain);
+      harmonicGain.connect(ctx.destination);
+
+      harmonic.frequency.value = freq * 2; // 옥타브 위
+      harmonic.type = 'sine';
+
+      harmonicGain.gain.setValueAtTime(volume * 0.3, startTime);
+      harmonicGain.gain.exponentialRampToValueAtTime(0.01, startTime + 0.12);
+
+      harmonic.start(startTime);
+      harmonic.stop(startTime + 0.12);
+    });
+
+    // 마지막에 강조음 추가
+    const finalOsc = ctx.createOscillator();
+    const finalGain = ctx.createGain();
+
+    finalOsc.connect(finalGain);
+    finalGain.connect(ctx.destination);
+
+    const finalTime = ctx.currentTime + 0.4;
+    finalOsc.frequency.value = 1046.50; // C6 (한 옥타브 높은 C)
+    finalOsc.type = 'square';
+
+    finalGain.gain.setValueAtTime(volume * 0.7, finalTime);
+    finalGain.gain.exponentialRampToValueAtTime(0.01, finalTime + 0.25);
+
+    finalOsc.start(finalTime);
+    finalOsc.stop(finalTime + 0.25);
   }
 
   // 부드러운 종소리 (마림바 스타일)
