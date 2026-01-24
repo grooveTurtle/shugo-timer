@@ -380,6 +380,9 @@ ipcMain.handle('validate-shortcut', (_event, shortcut) => {
   }
 });
 
+// 앱 이름 설정 (알림에 표시됨)
+app.setName('아이온2 타이머');
+
 app.whenReady().then(() => {
   loadShortcuts();
   createWindow();
