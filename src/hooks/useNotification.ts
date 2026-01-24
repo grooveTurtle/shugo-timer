@@ -24,13 +24,13 @@ export const useNotification = () => {
     onDismissRef.current = callback;
   }, []);
 
-  const showNotification = useCallback((title: string, body: string) => {
+  const showNotification = useCallback((title: string, body: string, customTag?: string) => {
     if (permission === 'granted') {
       const notification = new Notification(title, {
         body,
         icon: '/vite.svg',
         badge: '/vite.svg',
-        tag: 'shugo-timer',
+        tag: customTag || `shugo-timer-${Date.now()}`,
         requireInteraction: false,
       });
 
