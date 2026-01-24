@@ -1,5 +1,5 @@
 export interface Shortcuts {
-  stopAlarmSound: string;
+  dismissAlarm: string;
   toggleTimer: string;
   showWindow: string;
 }

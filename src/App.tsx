@@ -59,6 +59,16 @@ function App() {
     }
   }, [settings.enabled, updateSettings]);
 
+  // Electron에서 알람 끄기 이벤트 수신
+  useEffect(() => {
+    if (window.electronAPI) {
+      window.electronAPI.onDismissAlarm(() => {
+        console.log('Electron에서 알람 끄기 이벤트 수신');
+        handleDismissAlarm();
+      });
+    }
+  }, [handleDismissAlarm]);
+
   return (
     <div className="app">
       <header>

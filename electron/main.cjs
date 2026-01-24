@@ -6,6 +6,7 @@ let mainWindow;
 let tray;
 let timerEnabled = true; // 타이머 활성화 상태
 let currentShortcuts = {
+  dismissAlarm: 'CommandOrControl+Shift+Z',
   toggleTimer: 'CommandOrControl+Shift+W',
   showWindow: 'CommandOrControl+Shift+Q',
 };
@@ -81,6 +82,26 @@ function registerGlobalShortcuts() {
       }
     } catch (error) {
       console.error('창 표시 단축키 등록 오류:', error);
+    }
+  }
+
+  // 알람 끄기 단축키
+  if (currentShortcuts.dismissAlarm) {
+    try {
+      const registered = globalShortcut.register(currentShortcuts.dismissAlarm, () => {
+        console.log('글로벌 단축키로 알람 끄기:', currentShortcuts.dismissAlarm);
+        if (mainWindow) {
+          mainWindow.webContents.send('dismiss-alarm');
+        }
+      });
+
+      if (registered) {
+        console.log('알람 끄기 단축키 등록 성공:', currentShortcuts.dismissAlarm);
+      } else {
+        console.error('알람 끄기 단축키 등록 실패:', currentShortcuts.dismissAlarm);
+      }
+    } catch (error) {
+      console.error('알람 끄기 단축키 등록 오류:', error);
     }
   }
 }

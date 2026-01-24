@@ -10,6 +10,11 @@ contextBridge.exposeInMainWorld('electronAPI', {
     ipcRenderer.on('toggle-timer', () => callback());
   },
 
+  // 메인 프로세스로부터 알람 끄기 이벤트 수신
+  onDismissAlarm: (callback) => {
+    ipcRenderer.on('dismiss-alarm', () => callback());
+  },
+
   // 단축키 설정 가져오기
   getShortcuts: () => ipcRenderer.invoke('get-shortcuts'),
 
