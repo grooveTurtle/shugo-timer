@@ -204,6 +204,25 @@ const TimerSettings: React.FC<TimerSettingsProps> = ({ settings, onUpdate }) => 
 
       <div className="setting-section">
         <div className="section-header">
+          <h3>경기 시작 알림</h3>
+          <p className="section-description">경기 시작 10초 전 알림 기능</p>
+        </div>
+
+        <label className={`toggle-switch ${!settings.gameStartNotice ? 'inactive' : ''}`}>
+          <input
+            type="checkbox"
+            checked={settings.gameStartNotice}
+            onChange={(e) => onUpdate({ gameStartNotice: e.target.checked })}
+          />
+          <span className="toggle-slider"></span>
+          <span className="toggle-label">
+            {settings.gameStartNotice ? '활성화' : '비활성화'}
+          </span>
+        </label>
+      </div>
+
+      <div className="setting-section">
+        <div className="section-header">
           <h3>알람 사운드</h3>
           <p className="section-description">알람 소리를 선택하고 미리 들어보세요</p>
         </div>

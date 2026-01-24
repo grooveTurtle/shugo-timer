@@ -3,6 +3,7 @@
 export interface TimerSettings {
   alarmMinutes: number[];
   advanceNotices: number[];
+  gameStartNotice: boolean;
   alarmSound: string;
   enabled: boolean;
 }
@@ -15,4 +16,5 @@ export interface TimerSettingsProps {
 export interface AlarmSchedulerProps {
   settings: TimerSettings;
   onAlarm: (message: string, isAdvance: boolean) => void;
+  onGameStartNotice?: (message: string) => void;
 }

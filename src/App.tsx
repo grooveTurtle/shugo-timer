@@ -7,6 +7,7 @@ import AlarmModal from '@/components/AlarmModal';
 import { useTimerSettings } from '@/hooks/useTimerSettings';
 import { useNotification } from '@/hooks/useNotification';
 import { useAlarmScheduler } from '@/hooks/useAlarmScheduler';
+import { soundGenerator } from '@/utils/soundGenerator';
 import './App.css';
 
 
@@ -47,7 +48,14 @@ function App() {
     });
   }, [showNotification]);
 
-  useAlarmScheduler({ settings, onAlarm: handleAlarm });
+  // 경기 시작 알림 (시스템 알림 + 짧은 효과음, 모달 없음)
+  const handleGameStartNotice = useCallback((message: string) => {
+    console.log('Game start notice:', message);
+    showNotification('경기 시작 알림', message);
+    soundGenerator.play('gamestart', 0.5);
+  }, [showNotification]);
+
+  useAlarmScheduler({ settings, onAlarm: handleAlarm, onGameStartNotice: handleGameStartNotice });
 
   // Electron에서 토글 이벤트 수신
   useEffect(() => {

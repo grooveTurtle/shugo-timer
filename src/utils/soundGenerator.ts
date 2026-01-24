@@ -89,6 +89,31 @@ export class SoundGenerator {
     }
   }
 
+  // 경기 시작 알림 (짧고 주목을 끄는 더블 비프)
+  playGameStart(volume: number = 0.5): void {
+    const ctx = this.getAudioContext();
+
+    // 두 번의 짧은 고음 비프
+    for (let i = 0; i < 2; i++) {
+      const oscillator = ctx.createOscillator();
+      const gainNode = ctx.createGain();
+
+      oscillator.connect(gainNode);
+      gainNode.connect(ctx.destination);
+
+      const startTime = ctx.currentTime + i * 0.15;
+
+      oscillator.frequency.value = 1200; // 높은 음으로 주목 유도
+      oscillator.type = 'sine';
+
+      gainNode.gain.setValueAtTime(volume * 0.5, startTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.01, startTime + 0.1);
+
+      oscillator.start(startTime);
+      oscillator.stop(startTime + 0.12);
+    }
+  }
+
   // 부드러운 종소리 (마림바 스타일)
   playGentle(volume: number = 0.5): void {
     const ctx = this.getAudioContext();
@@ -146,6 +171,9 @@ export class SoundGenerator {
           break;
         case 'gentle':
           this.playGentle(volume);
+          break;
+        case 'gamestart':
+          this.playGameStart(volume);
           break;
         default:
           this.playUrgent(volume);
