@@ -2,14 +2,21 @@ import React, { useEffect, useRef } from 'react';
 import { AlarmModalProps } from '@/types';
 import './AlarmModal.css';
 
+const AUTO_DISMISS_TIMEOUT = 30000; // 30초 후 자동 종료
+
 const AlarmModal: React.FC<AlarmModalProps> = ({ isOpen, title, message, soundType, onDismiss }) => {
   const intervalRef = useRef<number | null>(null);
+  const autoDismissRef = useRef<number | null>(null);
 
   useEffect(() => {
     if (!isOpen) {
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
         intervalRef.current = null;
+      }
+      if (autoDismissRef.current) {
+        clearTimeout(autoDismissRef.current);
+        autoDismissRef.current = null;
       }
       return;
     }
@@ -25,13 +32,22 @@ const AlarmModal: React.FC<AlarmModalProps> = ({ isOpen, title, message, soundTy
       }, 3000);
     });
 
+    // 30초 후 자동 종료
+    autoDismissRef.current = window.setTimeout(() => {
+      onDismiss();
+    }, AUTO_DISMISS_TIMEOUT);
+
     return () => {
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
         intervalRef.current = null;
       }
+      if (autoDismissRef.current) {
+        clearTimeout(autoDismissRef.current);
+        autoDismissRef.current = null;
+      }
     };
-  }, [isOpen, soundType]);
+  }, [isOpen, soundType, onDismiss]);
 
   if (!isOpen) return null;
 
