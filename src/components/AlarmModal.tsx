@@ -1,6 +1,5 @@
 import React, { useEffect, useRef } from 'react';
 import { AlarmModalProps } from '@/types';
-import { soundGenerator } from '@/utils/soundGenerator';
 import './AlarmModal.css';
 
 const AlarmModal: React.FC<AlarmModalProps> = ({ isOpen, title, message, soundType, duration, onDismiss }) => {
@@ -26,13 +25,16 @@ const AlarmModal: React.FC<AlarmModalProps> = ({ isOpen, title, message, soundTy
       return;
     }
 
-    // 즉시 한 번 재생
-    soundGenerator.play(soundType, 0.7);
-
-    // 3초마다 반복 재생
-    intervalRef.current = window.setInterval(() => {
+    // 사운드 재생 함수를 동적으로 import
+    import('../utils/soundGenerator').then(({ soundGenerator }) => {
+      // 즉시 한 번 재생
       soundGenerator.play(soundType, 0.7);
-    }, 3000);
+
+      // 3초마다 반복 재생
+      intervalRef.current = window.setInterval(() => {
+        soundGenerator.play(soundType, 0.7);
+      }, 3000);
+    });
 
     // 설정된 시간 후 자동 종료 (초 단위를 밀리초로 변환)
     autoDismissRef.current = window.setTimeout(() => {
