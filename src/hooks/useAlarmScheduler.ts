@@ -31,12 +31,6 @@ export const useAlarmScheduler = ({ settings, onAlarm, onGameStartNotice }: Alar
       const currentMinute = now.getMinutes();
       const currentSecond = now.getSeconds();
 
-      // 디버깅: 매 분의 0초에 현재 상태 로그
-      if (currentSecond === 0) {
-        console.log(`[AlarmScheduler] 현재 시간: ${currentHour}:${currentMinute}:${currentSecond}`);
-        console.log('[AlarmScheduler] 설정:', JSON.stringify(settings.contentSettings, null, 2));
-      }
-
       // 모든 활성화된 컨텐츠를 순회
       (Object.keys(settings.contentSettings) as ContentType[]).forEach(contentId => {
         const contentConfig = settings.contentSettings[contentId];
@@ -44,19 +38,11 @@ export const useAlarmScheduler = ({ settings, onAlarm, onGameStartNotice }: Alar
 
         // 비활성화되었거나 옵션이 선택되지 않은 컨텐츠는 스킵
         if (!contentConfig.enabled || contentConfig.options.length === 0 || !contentInfo) {
-          if (currentSecond === 0) {
-            console.log(`[AlarmScheduler] ${contentId} 스킵 - enabled: ${contentConfig.enabled}, options: ${contentConfig.options}`);
-          }
           return;
         }
 
         // 컨텐츠별 알람 시간 계산
         const alarmTimes = contentInfo.getAlarmTimes(contentConfig.options);
-
-        // 디버깅: 알람 시간 확인
-        if (currentSecond === 0) {
-          console.log(`[AlarmScheduler] ${contentId} 알람 시간:`, alarmTimes);
-        }
 
         alarmTimes.forEach(({ hour: alarmHour, minute: alarmMinute }) => {
           // 슈고 페스타: 매 시간 해당 분에 알람 (hour는 무시)
@@ -68,7 +54,6 @@ export const useAlarmScheduler = ({ settings, onAlarm, onGameStartNotice }: Alar
           // 메인 알람 체크 (해당 분의 처음 5초 이내에 체크)
           if (isTimeMatch && currentSecond < 5) {
             const alarmKey = `${currentHour}:${alarmMinute}:${contentId}:main`;
-            console.log(`[AlarmScheduler] 시간 일치! alarmKey: ${alarmKey}, 이미 알림됨: ${notifiedAlarmsRef.current.has(alarmKey)}`);
             if (!notifiedAlarmsRef.current.has(alarmKey)) {
               notifiedAlarmsRef.current.add(alarmKey);
 
@@ -76,7 +61,6 @@ export const useAlarmScheduler = ({ settings, onAlarm, onGameStartNotice }: Alar
                 ? `${currentHour}시 ${alarmMinute}분 슈고 페스타가 열렸습니다!`
                 : `${currentHour}시 시공의 균열이 열렸습니다!`;
 
-              console.log(`[AlarmScheduler] 알람 발생: ${message}`);
               onAlarmRef.current(message, false);
 
               setTimeout(() => {
