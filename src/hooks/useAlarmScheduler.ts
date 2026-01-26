@@ -40,9 +40,9 @@ export const useAlarmScheduler = ({ settings, onAlarm, onGameStartNotice }: Alar
             ? currentMinute === alarmMinute
             : currentHour === alarmHour && currentMinute === alarmMinute;
 
-          // 메인 알람 체크
-          if (isTimeMatch && currentSecond === 0) {
-            const alarmKey = `${currentHour}:${currentMinute}:${contentId}:main`;
+          // 메인 알람 체크 (해당 분의 처음 5초 이내에 체크)
+          if (isTimeMatch && currentSecond < 5) {
+            const alarmKey = `${currentHour}:${alarmMinute}:${contentId}:main`;
             if (!notifiedAlarmsRef.current.has(alarmKey)) {
               notifiedAlarmsRef.current.add(alarmKey);
 
@@ -73,8 +73,9 @@ export const useAlarmScheduler = ({ settings, onAlarm, onGameStartNotice }: Alar
               ? currentMinute === advanceMinute
               : currentHour === advanceHour && currentMinute === advanceMinute;
 
-            if (isAdvanceTimeMatch && currentSecond === 0) {
-              const advanceKey = `${currentHour}:${currentMinute}:${contentId}:advance${advance}`;
+            // 사전 알림도 해당 분의 처음 5초 이내에 체크
+            if (isAdvanceTimeMatch && currentSecond < 5) {
+              const advanceKey = `${currentHour}:${advanceMinute}:${contentId}:advance${advance}`;
               if (!notifiedAlarmsRef.current.has(advanceKey)) {
                 notifiedAlarmsRef.current.add(advanceKey);
 
