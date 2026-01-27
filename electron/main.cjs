@@ -421,6 +421,11 @@ ipcMain.handle('validate-shortcut', (_event, shortcut) => {
 // 앱 이름 설정 (알림에 표시됨)
 app.setName('아이온2 타이머');
 
+// Windows 알림에 표시되는 앱 이름 설정
+if (process.platform === 'win32') {
+  app.setAppUserModelId('아이온2 컨텐츠 타이머');
+}
+
 // 두 번째 인스턴스가 실행되면 기존 창 포커스
 app.on('second-instance', () => {
   if (mainWindow) {
