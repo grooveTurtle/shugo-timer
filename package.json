@@ -1,7 +1,7 @@
 {
   "name": "aion2-content-timer",
   "private": true,
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "아이온2 컨텐츠 타이머 - 데스크톱 애플리케이션",
   "author": "grooveTurtle",
   "main": "electron/main.cjs",

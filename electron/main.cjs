@@ -1,6 +1,23 @@
-const { app, BrowserWindow, Tray, Menu, nativeImage, ipcMain, globalShortcut } = require('electron');
+const { app, BrowserWindow, Tray, Menu, nativeImage, ipcMain, globalShortcut, dialog } = require('electron');
 const path = require('path');
 const fs = require('fs');
+
+// 단일 인스턴스 잠금
+const gotTheLock = app.requestSingleInstanceLock();
+
+if (!gotTheLock) {
+  // 이미 실행 중인 인스턴스가 있으면 경고창 표시 후 종료
+  app.whenReady().then(() => {
+    dialog.showMessageBoxSync({
+      type: 'warning',
+      title: '아이온2 컨텐츠 타이머',
+      message: '프로그램이 이미 실행 중입니다.',
+      detail: '시스템 트레이에서 실행 중인 프로그램을 확인하세요.',
+      buttons: ['확인']
+    });
+    app.quit();
+  });
+} else {
 
 let mainWindow;
 let tray;
@@ -404,6 +421,17 @@ ipcMain.handle('validate-shortcut', (_event, shortcut) => {
 // 앱 이름 설정 (알림에 표시됨)
 app.setName('아이온2 타이머');
 
+// 두 번째 인스턴스가 실행되면 기존 창 포커스
+app.on('second-instance', () => {
+  if (mainWindow) {
+    if (mainWindow.isMinimized()) {
+      mainWindow.restore();
+    }
+    mainWindow.show();
+    mainWindow.focus();
+  }
+});
+
 app.whenReady().then(() => {
   loadShortcuts();
   createWindow();
@@ -433,3 +461,5 @@ app.on('before-quit', () => {
 app.on('will-quit', () => {
   globalShortcut.unregisterAll();
 });
+
+} // gotTheLock else 블록 종료
