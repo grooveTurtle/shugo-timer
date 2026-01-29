@@ -1,9 +1,9 @@
 .timer-settings {
-  background-color: rgba(255, 255, 255, 0.03);
+  background-color: var(--card-bg);
   border-radius: 16px;
   padding: 2rem;
   margin-top: 2rem;
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--card-border);
   transition: all 0.3s ease;
 }
 
@@ -46,7 +46,7 @@
   position: relative;
   width: 50px;
   height: 26px;
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: var(--border-color);
   border-radius: 13px;
   transition: background-color 0.3s;
 }
@@ -73,12 +73,14 @@
 
 .toggle-label {
   font-weight: 600;
-  color: rgba(255, 255, 255, 0.8);
+  color: var(--text-color);
+  opacity: 0.8;
   transition: color 0.3s;
 }
 
 .toggle-switch.inactive .toggle-label {
   color: #ff4444;
+  opacity: 1;
 }
 
 .toggle-switch.inactive .toggle-slider {
@@ -131,8 +133,8 @@
 
 .content-card {
   border-radius: 12px;
-  border: 2px solid rgba(100, 100, 100, 0.3);
-  background-color: rgba(50, 50, 50, 0.3);
+  border: 2px solid var(--border-color);
+  background-color: var(--card-bg);
   padding: 1rem;
   transition: all 0.2s;
 }
@@ -156,17 +158,19 @@
 
 .content-name {
   font-weight: 600;
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--text-color);
+  opacity: 0.9;
   font-size: 1rem;
 }
 
 .content-card.active .content-name {
   color: #646cff;
+  opacity: 1;
 }
 
 .content-description {
   font-size: 0.75rem;
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--text-muted);
 }
 
 .content-card.active .content-description {
@@ -176,7 +180,7 @@
 .content-options {
   margin-top: 1rem;
   padding-top: 1rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 1px solid var(--border-color);
 }
 
 .options-grid {
@@ -188,9 +192,10 @@
 .option-btn {
   padding: 0.5rem 0.75rem;
   border-radius: 8px;
-  border: 2px solid rgba(255, 255, 255, 0.1);
-  background-color: rgba(255, 255, 255, 0.03);
-  color: rgba(255, 255, 255, 0.7);
+  border: 2px solid var(--border-color);
+  background-color: var(--card-bg);
+  color: var(--text-color);
+  opacity: 0.7;
   font-size: 0.9rem;
   font-weight: 500;
   cursor: pointer;
@@ -200,7 +205,7 @@
 .option-btn:hover {
   border-color: rgba(100, 108, 255, 0.5);
   background-color: rgba(100, 108, 255, 0.1);
-  color: rgba(255, 255, 255, 0.9);
+  opacity: 0.9;
 }
 
 .option-btn.active {
@@ -208,62 +213,55 @@
   background-color: rgba(100, 108, 255, 0.2);
   color: #646cff;
   font-weight: 600;
+  opacity: 1;
 }
 
-/* Game Start Notice Button */
-.game-start-notice-btn {
+/* Advance Notice Section */
+.advance-notice-section {
+  margin-top: 1rem;
+  padding-top: 0.75rem;
+  border-top: 1px dashed var(--border-color);
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  width: 100%;
-  margin-top: 0.75rem;
-  padding: 0.6rem 0.75rem;
-  border-radius: 8px;
-  border: 1px dashed rgba(255, 255, 255, 0.2);
-  background: transparent;
-  color: rgba(255, 255, 255, 0.5);
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.advance-notice-label {
   font-size: 0.85rem;
+  color: var(--text-muted);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.advance-notice-grid {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.advance-btn {
+  padding: 0.35rem 0.6rem;
+  border-radius: 6px;
+  border: 1px solid var(--border-color);
+  background-color: transparent;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  font-weight: 500;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.2s;
 }
 
-.game-start-notice-btn:hover {
-  border-color: rgba(255, 152, 0, 0.4);
-  background: rgba(255, 152, 0, 0.05);
+.advance-btn:hover {
+  border-color: rgba(100, 108, 255, 0.5);
+  color: var(--text-color);
 }
 
-.game-start-notice-btn.active {
-  border-style: solid;
-  border-color: rgba(255, 152, 0, 0.5);
-  background: rgba(255, 152, 0, 0.1);
-  color: rgba(255, 255, 255, 0.9);
-}
-
-.game-start-notice-btn .notice-icon {
-  font-size: 1rem;
-}
-
-.game-start-notice-btn .notice-text {
-  flex: 1;
-  text-align: left;
-}
-
-.game-start-notice-btn .notice-status {
-  font-size: 0.7rem;
-  font-weight: 700;
-  padding: 0.15rem 0.4rem;
-  border-radius: 4px;
-  letter-spacing: 0.5px;
-}
-
-.game-start-notice-btn .notice-status.on {
-  background: rgba(255, 152, 0, 0.3);
-  color: #ff9800;
-}
-
-.game-start-notice-btn .notice-status.off {
-  background: rgba(255, 255, 255, 0.1);
-  color: rgba(255, 255, 255, 0.4);
+.advance-btn.active {
+  border-color: #646cff;
+  background-color: rgba(100, 108, 255, 0.15);
+  color: #646cff;
+  font-weight: 600;
 }
 
 /* Warning Banner Small */
@@ -298,13 +296,14 @@
 .section-header h3 {
   margin: 0 0 0.25rem 0;
   font-size: 1.2rem;
-  color: rgba(255, 255, 255, 0.95);
+  color: var(--text-color);
+  opacity: 0.95;
 }
 
 .section-description {
   margin: 0;
   font-size: 0.9rem;
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--text-muted);
 }
 
 /* Quick Select Grid */
@@ -318,9 +317,10 @@
 .quick-select-btn {
   padding: 0.75rem 1rem;
   border-radius: 8px;
-  border: 2px solid rgba(255, 255, 255, 0.1);
-  background-color: rgba(255, 255, 255, 0.03);
-  color: rgba(255, 255, 255, 0.7);
+  border: 2px solid var(--border-color);
+  background-color: var(--card-bg);
+  color: var(--text-color);
+  opacity: 0.7;
   font-size: 1rem;
   font-weight: 500;
   cursor: pointer;
@@ -330,7 +330,7 @@
 .quick-select-btn:hover {
   border-color: rgba(100, 108, 255, 0.5);
   background-color: rgba(100, 108, 255, 0.1);
-  color: rgba(255, 255, 255, 0.9);
+  opacity: 0.9;
 }
 
 .quick-select-btn.active {
@@ -338,6 +338,7 @@
   background-color: rgba(100, 108, 255, 0.2);
   color: #646cff;
   font-weight: 600;
+  opacity: 1;
 }
 
 /* Custom Items */
@@ -352,9 +353,13 @@
   border-radius: 8px;
 }
 
+[data-theme="light"] .custom-items {
+  background-color: rgba(0, 0, 0, 0.03);
+}
+
 .custom-label {
   font-size: 0.85rem;
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--text-muted);
   font-weight: 500;
 }
 
@@ -367,13 +372,14 @@
   border: 1px solid rgba(100, 108, 255, 0.3);
   border-radius: 20px;
   font-size: 0.9rem;
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--text-color);
+  opacity: 0.9;
 }
 
 .custom-chip button {
   background: none;
   border: none;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--text-muted);
   font-size: 1.2rem;
   cursor: pointer;
   padding: 0;
@@ -394,9 +400,9 @@
   width: 100%;
   padding: 0.75rem;
   border-radius: 8px;
-  border: 2px dashed rgba(255, 255, 255, 0.2);
+  border: 2px dashed var(--border-color);
   background-color: transparent;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--text-muted);
   font-size: 0.95rem;
   cursor: pointer;
   transition: all 0.2s;
@@ -421,8 +427,12 @@
   border-radius: 8px;
   border: 2px solid rgba(100, 108, 255, 0.3);
   background-color: rgba(0, 0, 0, 0.2);
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--text-color);
   font-size: 1rem;
+}
+
+[data-theme="light"] .custom-input-row input {
+  background-color: white;
 }
 
 .custom-input-row input:focus {
@@ -448,16 +458,16 @@
 .cancel-btn {
   padding: 0.75rem 1rem;
   border-radius: 8px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid var(--border-color);
   background-color: transparent;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--text-muted);
   cursor: pointer;
   transition: all 0.2s;
 }
 
 .cancel-btn:hover {
-  border-color: rgba(255, 255, 255, 0.4);
-  color: rgba(255, 255, 255, 0.8);
+  border-color: var(--text-muted);
+  color: var(--text-color);
 }
 
 /* Sound Selector */
@@ -473,8 +483,8 @@
   gap: 1rem;
   padding: 1rem 1.25rem;
   border-radius: 12px;
-  border: 2px solid rgba(255, 255, 255, 0.1);
-  background-color: rgba(255, 255, 255, 0.03);
+  border: 2px solid var(--border-color);
+  background-color: var(--card-bg);
   cursor: pointer;
   transition: all 0.25s ease;
   position: relative;
@@ -503,7 +513,8 @@
 .sound-label {
   flex: 1;
   font-weight: 500;
-  color: rgba(255, 255, 255, 0.85);
+  color: var(--text-color);
+  opacity: 0.85;
   font-size: 1rem;
   min-width: 0;
 }
@@ -511,6 +522,7 @@
 .sound-option.active .sound-label {
   color: #646cff;
   font-weight: 600;
+  opacity: 1;
 }
 
 .play-btn {
@@ -547,140 +559,4 @@
 
 .play-btn:active {
   transform: scale(1.05);
-}
-
-/* Light Mode */
-@media (prefers-color-scheme: light) {
-  .timer-settings {
-    background-color: rgba(0, 0, 0, 0.02);
-    border-color: rgba(0, 0, 0, 0.08);
-  }
-
-  .settings-header {
-    border-bottom-color: rgba(100, 108, 255, 0.15);
-  }
-
-  .toggle-label,
-  .section-header h3,
-  .sound-label {
-    color: rgba(0, 0, 0, 0.85);
-  }
-
-  .section-description {
-    color: rgba(0, 0, 0, 0.5);
-  }
-
-  .toggle-slider {
-    background-color: rgba(0, 0, 0, 0.1);
-  }
-
-  .quick-select-btn {
-    border-color: rgba(0, 0, 0, 0.1);
-    background-color: rgba(0, 0, 0, 0.02);
-    color: rgba(0, 0, 0, 0.7);
-  }
-
-  .quick-select-btn:hover {
-    background-color: rgba(100, 108, 255, 0.08);
-    color: rgba(0, 0, 0, 0.9);
-  }
-
-  .custom-items {
-    background-color: rgba(0, 0, 0, 0.03);
-  }
-
-  .custom-label {
-    color: rgba(0, 0, 0, 0.5);
-  }
-
-  .custom-chip {
-    color: rgba(0, 0, 0, 0.9);
-  }
-
-  .custom-chip button {
-    color: rgba(0, 0, 0, 0.5);
-  }
-
-  .add-custom-btn {
-    border-color: rgba(0, 0, 0, 0.15);
-    color: rgba(0, 0, 0, 0.5);
-  }
-
-  .add-custom-btn:hover {
-    background-color: rgba(100, 108, 255, 0.05);
-  }
-
-  .custom-input-row input {
-    background-color: white;
-    color: rgba(0, 0, 0, 0.9);
-  }
-
-  .cancel-btn {
-    border-color: rgba(0, 0, 0, 0.2);
-    color: rgba(0, 0, 0, 0.6);
-  }
-
-  .cancel-btn:hover {
-    border-color: rgba(0, 0, 0, 0.4);
-    color: rgba(0, 0, 0, 0.8);
-  }
-
-  .sound-option {
-    border-color: rgba(0, 0, 0, 0.1);
-    background-color: rgba(0, 0, 0, 0.02);
-  }
-
-  .sound-option:hover {
-    background-color: rgba(100, 108, 255, 0.08);
-  }
-
-  .content-card {
-    border-color: rgba(0, 0, 0, 0.1);
-    background-color: rgba(0, 0, 0, 0.02);
-  }
-
-  .content-card.active {
-    background-color: rgba(100, 108, 255, 0.08);
-  }
-
-  .content-name {
-    color: rgba(0, 0, 0, 0.85);
-  }
-
-  .content-description {
-    color: rgba(0, 0, 0, 0.5);
-  }
-
-  .content-options {
-    border-top-color: rgba(0, 0, 0, 0.1);
-  }
-
-  .option-btn {
-    border-color: rgba(0, 0, 0, 0.1);
-    background-color: rgba(0, 0, 0, 0.02);
-    color: rgba(0, 0, 0, 0.7);
-  }
-
-  .option-btn:hover {
-    background-color: rgba(100, 108, 255, 0.08);
-    color: rgba(0, 0, 0, 0.9);
-  }
-
-  .game-start-notice-btn {
-    border-color: rgba(0, 0, 0, 0.15);
-    color: rgba(0, 0, 0, 0.4);
-  }
-
-  .game-start-notice-btn:hover {
-    background: rgba(255, 152, 0, 0.05);
-  }
-
-  .game-start-notice-btn.active {
-    color: rgba(0, 0, 0, 0.8);
-  }
-
-  .game-start-notice-btn .notice-status.off {
-    background: rgba(0, 0, 0, 0.08);
-    color: rgba(0, 0, 0, 0.3);
-  }
 }

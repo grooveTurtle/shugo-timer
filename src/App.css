@@ -9,13 +9,43 @@ header {
   margin-bottom: 2rem;
 }
 
-header h1 {
-  font-size: 2.5rem;
+.header-top {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.75rem;
   margin-bottom: 1rem;
+}
+
+header h1 {
+  font-size: 2rem;
+  margin: 0;
   background: linear-gradient(135deg, #646cff 0%, #747bff 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+}
+
+.theme-toggle {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 2px solid var(--border-color);
+  background-color: var(--card-bg);
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 0;
+  flex-shrink: 0;
+}
+
+.theme-toggle:hover {
+  border-color: #646cff;
+  background-color: rgba(100, 108, 255, 0.1);
+  transform: scale(1.1);
 }
 
 .notification-banner {
@@ -44,12 +74,6 @@ footer {
   text-align: center;
   margin-top: 2rem;
   padding: 1rem;
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--text-muted);
   font-size: 0.9rem;
-}
-
-@media (prefers-color-scheme: light) {
-  footer {
-    color: rgba(0, 0, 0, 0.5);
-  }
 }

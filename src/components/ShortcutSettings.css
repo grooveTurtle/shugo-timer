@@ -1,9 +1,9 @@
 .shortcut-settings {
-  background-color: rgba(255, 255, 255, 0.03);
+  background-color: var(--card-bg);
   border-radius: 16px;
   padding: 1.5rem;
   margin-top: 1.5rem;
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--card-border);
   transition: all 0.3s ease;
 }
 
@@ -22,7 +22,7 @@
 .shortcut-settings .settings-description {
   margin: 0;
   font-size: 0.9rem;
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--text-muted);
 }
 
 .shortcut-list {
@@ -32,8 +32,8 @@
 }
 
 .shortcut-item {
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
   border-radius: 12px;
   padding: 0.75rem 1rem;
   display: flex;
@@ -43,7 +43,7 @@
 }
 
 .shortcut-item:hover {
-  background: rgba(255, 255, 255, 0.04);
+  background: var(--hover-bg);
   border-color: rgba(100, 108, 255, 0.2);
 }
 
@@ -57,12 +57,13 @@
 .shortcut-label {
   font-size: 1rem;
   font-weight: 600;
-  color: rgba(255, 255, 255, 0.95);
+  color: var(--text-color);
+  opacity: 0.95;
 }
 
 .shortcut-description {
   font-size: 0.75rem;
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--text-muted);
   text-align: right;
   flex-shrink: 0;
 }
@@ -90,8 +91,8 @@
 }
 
 .shortcut-input {
-  background: rgba(255, 255, 255, 0.08);
-  color: rgba(255, 255, 255, 0.9);
+  background: var(--hover-bg);
+  color: var(--text-color);
   border: 2px solid rgba(100, 108, 255, 0.3);
   padding: 0.4rem 0.75rem;
   border-radius: 8px;
@@ -111,7 +112,10 @@
   border-color: #646cff;
   background: rgba(100, 108, 255, 0.15);
   box-shadow: 0 0 0 2px rgba(100, 108, 255, 0.2);
-  color: rgba(255, 255, 255, 0.9);
+}
+
+[data-theme="light"] .shortcut-input {
+  background-color: white;
 }
 
 .shortcut-btn {
@@ -148,14 +152,14 @@
 }
 
 .cancel-btn {
-  background: rgba(255, 255, 255, 0.05);
-  color: rgba(255, 255, 255, 0.7);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--hover-bg);
+  color: var(--text-muted);
+  border: 1px solid var(--border-color);
 }
 
 .cancel-btn:hover {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(255, 255, 255, 0.15);
+  background: var(--border-color);
+  color: var(--text-color);
 }
 
 .shortcut-error {
@@ -199,7 +203,7 @@
   font-size: 0.85rem;
   line-height: 1.6;
   opacity: 0.7;
-  color: rgba(255, 255, 255, 0.8);
+  color: var(--text-color);
 }
 
 .shortcut-help li {
@@ -209,52 +213,3 @@
 .shortcut-help li:last-child {
   margin-bottom: 0;
 }
-
-/* Light Mode */
-@media (prefers-color-scheme: light) {
-  .shortcut-settings {
-    background-color: rgba(0, 0, 0, 0.02);
-    border-color: rgba(0, 0, 0, 0.08);
-  }
-
-  .shortcut-settings .settings-header {
-    border-bottom-color: rgba(100, 108, 255, 0.15);
-  }
-
-  .shortcut-settings .settings-description {
-    color: rgba(0, 0, 0, 0.5);
-  }
-
-  .shortcut-label {
-    color: rgba(0, 0, 0, 0.85);
-  }
-
-  .shortcut-description {
-    color: rgba(0, 0, 0, 0.5);
-  }
-
-  .shortcut-item {
-    border-color: rgba(0, 0, 0, 0.1);
-    background-color: rgba(0, 0, 0, 0.02);
-  }
-
-  .shortcut-item:hover {
-    background-color: rgba(100, 108, 255, 0.08);
-  }
-
-  .shortcut-input {
-    background-color: white;
-    color: rgba(0, 0, 0, 0.9);
-  }
-
-  .cancel-btn {
-    border-color: rgba(0, 0, 0, 0.2);
-    color: rgba(0, 0, 0, 0.6);
-  }
-
-  .cancel-btn:hover {
-    border-color: rgba(0, 0, 0, 0.4);
-    color: rgba(0, 0, 0, 0.8);
-  }
-}
-

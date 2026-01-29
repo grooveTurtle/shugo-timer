@@ -19,6 +19,20 @@ function App() {
     title: '',
     message: '',
   });
+  const [isDarkMode, setIsDarkMode] = useState(() => {
+    const saved = localStorage.getItem('theme');
+    return saved ? saved === 'dark' : true;
+  });
+
+  // 테마 적용
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', isDarkMode ? 'dark' : 'light');
+    localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
+  }, [isDarkMode]);
+
+  const toggleTheme = useCallback(() => {
+    setIsDarkMode(prev => !prev);
+  }, []);
 
   const handleDismissAlarm = useCallback(() => {
     setAlarmState({
@@ -80,7 +94,12 @@ function App() {
   return (
     <div className="app">
       <header>
-        <h1>아이온2 컨텐츠 타이머</h1>
+        <div className="header-top">
+          <h1>아이온2 컨텐츠 타이머</h1>
+          <button className="theme-toggle" onClick={toggleTheme} title={isDarkMode ? '라이트 모드로 전환' : '다크 모드로 전환'}>
+            {isDarkMode ? '☀️' : '🌙'}
+          </button>
+        </div>
         {permission !== 'granted' && (
           <div className="notification-banner">
             <p>브라우저 알림을 허용하면 백그라운드에서도 알람을 받을 수 있습니다.</p>
