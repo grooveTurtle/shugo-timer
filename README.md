@@ -1,18 +1,13 @@
 
 # 아이온2 컨텐츠 타이머
 
-<img
-  width="300"
-  height="2616"
-  alt="아이온2_컨텐츠_타이머_소개"
-  src="https://github.com/user-attachments/assets/af460fcc-9485-4477-a9d0-f0197b4088cc"
-/>
+<img width="350" height="2539" alt="컨텐츠_타이머_스크린샷" src="https://github.com/user-attachments/assets/a98b6a60-2cf2-4e70-81c3-a06e7fbe9fe7" />
 
 
 ### 프로그램 개요
 - 특정 시간에 출현하는 아이온2의 각종 컨텐츠 알림 기능을 개발하였습니다.
 - 현재는 슈고 페스타와 시공의 균열 두 가지의 컨텐츠에 대한 알림을 제공합니다.
-- 알림 발생시, 프로그램 내 확인 버튼을 누르거나 단축키를 이용하여 알림을 끌 수 있습니다.
+- 알림 발생시, 팝업창에 확인 버튼을 누르거나 단축키를 이용하여 알림을 끌 수 있습니다.
 
 ### 프로그램 다운로드
 - [다운로드 링크](https://github.com/grooveTurtle/aion2-content-timer/releases)
