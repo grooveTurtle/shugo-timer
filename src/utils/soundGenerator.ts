@@ -6,6 +6,10 @@ export class SoundGenerator {
     if (!this.audioContext) {
       this.audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
     }
+    // suspended 상태면 resume (백그라운드/비활성 시 발생)
+    if (this.audioContext.state === 'suspended') {
+      this.audioContext.resume();
+    }
     return this.audioContext;
   }
 
